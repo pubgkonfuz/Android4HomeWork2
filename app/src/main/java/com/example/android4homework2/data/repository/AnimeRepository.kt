@@ -1,41 +1,40 @@
 package com.example.android4homework2.data.repository
 
+import androidx.lifecycle.LiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.example.android4homework2.data.remote.paging.AnimePagingSource
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.example.android4homework2.data.remote.apiservice.KitsuApiService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
+import com.example.android4homework2.data.remote.models.DataItem
+import com.example.android4homework2.data.remote.paging.AnimePagingSource
+import com.example.android4homework2.data.remote.paging.MangaPagingSource
+import javax.inject.Inject
 
-class AnimeRepository(private val apiService: KitsuApiService) {
+class AnimeRepository @Inject constructor(
+    private val kitsuApiService: KitsuApiService
+) {
+    fun fetchAnime(): LiveData<PagingData<DataItem>> {
 
-//    suspend fun getAnime(limit: Int, offset: Int, callback: (List<Data>, Boolean) -> Unit) {
-//        apiService.getAnime(limit, offset).enqueue(object : Callback<MangaResponse> {
-//            override fun onResponse(call: Call<MangaResponse>, response: Response<MangaResponse>) {
-//                if (response.isSuccessful) {
-//                    val mangaResponse = response.body()
-//                    Log.e("data",response.body().toString())
-//                    mangaResponse?.let {
-//                        val animeList = it.data
-//                        val isLastPage =
-//                            animeList.isEmpty()
-//                        callback(animeList, isLastPage)
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<MangaResponse>, t: Throwable) {
-//                callback(emptyList(),false)
-//            }
-//        })
-//    }
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                initialLoadSize = 20,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { AnimePagingSource(kitsuApiService) }
+        ).liveData
+    }
 
-    fun getAnime() = Pager(
-        PagingConfig(
-            pageSize = 15,
-            initialLoadSize = 15
-        )
-    ) {
-        AnimePagingSource()
-    }.flow.flowOn(Dispatchers.IO)
+    fun fetchManga(): LiveData<PagingData<DataItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                initialLoadSize = 20,
+                enablePlaceholders = true
+            ),
+
+            pagingSourceFactory = { MangaPagingSource(kitsuApiService) }
+        ).liveData
+    }
 }
