@@ -8,11 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android4homework2.R
 import com.example.android4homework2.databinding.FragmentAnimeBinding
 import com.example.android4homework2.ui.adapter.AnimeAdapter
+import com.example.android4homework2.ui.fragment.ViewPagerFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,39 +24,30 @@ class AnimeFragment : Fragment(R.layout.fragment_anime) {
 
     private val binding by viewBinding(FragmentAnimeBinding::bind)
     private val viewModel by viewModels<AnimeViewModel>()
-    private val animeAdapter = AnimeAdapter()
+    private val animeAdapter = AnimeAdapter(::onItemClick)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
         setupObserver()
-        setupRefresh()
+        animeLaunch()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            if (binding.progressBar.isVisible) {
-                binding.progressBar.isVisible = false
-            }
-        }
+    }
+
+    private fun animeLaunch() = with(binding) {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 animeAdapter.loadStateFlow.collect {
-                    binding.appendProgress.isVisible = it.source.prepend is LoadState.Loading
-                    binding.prependProgress.isVisible = it.source.append is LoadState.Loading
+                    progressBar.isVisible = it.source.refresh is LoadState.Loading
+                    appendProgress.isVisible = it.source.append is LoadState.Loading
+
                 }
             }
         }
     }
-        private fun setupRefresh() {
-            binding.swipeRefreshLayout.setOnRefreshListener {
-                binding.swipeRefreshLayout.isRefreshing = false
-        }
-    }
 
     private fun initialize() = with(binding) {
-        rvAnime.apply {
-            adapter = animeAdapter
-        }
+        rvAnime.adapter = animeAdapter
     }
 
     private fun setupObserver() {
@@ -63,5 +56,13 @@ class AnimeFragment : Fragment(R.layout.fragment_anime) {
                 animeAdapter.submitData(it)
             }
         }
+    }
+
+    private fun onItemClick(id: String) {
+        findNavController().navigate(
+            ViewPagerFragmentDirections.actionViewPagerFragment2ToDetailFragment(
+                id
+            )
+        )
     }
 }

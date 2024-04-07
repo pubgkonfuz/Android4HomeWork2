@@ -2,4 +2,18 @@
     <string name="app_name">Android4HomeWork2</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Anime">AnimeHi</string>
+    <string name="animeHi">Anime</string>
+    <string name="mangaHi">Manga</string>
+    <string name="anime_name">Anime name</string>
+    <string name="back"><![CDATA[< Back]]></string>
+    <string name="add_to_library">Add to Library</string>
+    <string name="tv_1999">tv-1999</string>
+    <string name="p3itugp39ehfjpomsxrdyctfuvgyibuhonijpxrdcytfuvgyibuhonijpmokxrdctfoxrdctfvgybhunjimokesxdrctfvgybhunjimrxdmkl_rxdctfokrdctfvg">p3itugp39ehfjpomsxrdyctfuvgyibuhonijpxrdcytfuvgyibuhonijpmokxrdctfoxrdctfvgybhunjimokesxdrctfvgybhunjimrxdmkl,rxdctfokrdctfvgybuhnjimkesxrdctfvgybhunjixrdctfvgybhunij...</string>
+    <string name="view_more">View more</string>
+    <string name="pirate">pirate</string>
+    <string name="rating">(Rating)</string>
+    <string name="rank_30">Rank #30</string>
+    <string name="kitsy_score">Kitsy Score</string>
+    <string name="eight_nine">89%</string>
 </resources>

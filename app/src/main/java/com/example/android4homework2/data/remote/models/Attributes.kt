@@ -20,7 +20,7 @@ data class Attributes(
     @SerializedName("averageRating")
     val averageRating: String = "",
     @SerializedName("coverImage")
-    val coverImage: CoverImage,
+    val coverImage: CoverImage? = null,
     @SerializedName("showType")
     val showType: String = "",
     @SerializedName("abbreviatedTitles")
@@ -55,6 +55,8 @@ data class Attributes(
     val ageRatingGuide: String = "",
     @SerializedName("startDate")
     val startDate: String = "",
+    @SerializedName("description")
+    val description: String? = null,
     @SerializedName("status")
     val status: String = ""
 )

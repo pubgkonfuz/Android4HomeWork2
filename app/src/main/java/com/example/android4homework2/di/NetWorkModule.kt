@@ -1,5 +1,6 @@
 package com.example.android4homework2.di
 
+import com.example.android4homework2.data.remote.apiservice.DetailApiService
 import com.example.android4homework2.data.remote.apiservice.KitsuApiService
 import dagger.Module
 import dagger.Provides
@@ -34,7 +35,7 @@ object NetWorkModule {
 
     @Provides
     @Singleton
-    fun retrofitClient(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+    fun provideRetrofitClient(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
@@ -42,8 +43,14 @@ object NetWorkModule {
 
     @Provides
     @Singleton
-    fun provideAnimeApi(retrofit: Retrofit): KitsuApiService {
+    fun provideKitsuApiService(retrofit: Retrofit): KitsuApiService {
         return retrofit.create(KitsuApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDetailApiService(retrofit: Retrofit): DetailApiService {
+        return retrofit.create(DetailApiService::class.java)
     }
 }
 

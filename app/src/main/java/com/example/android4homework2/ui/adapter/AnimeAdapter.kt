@@ -9,10 +9,19 @@ import com.bumptech.glide.Glide
 import com.example.android4homework2.data.remote.models.DataItem
 import com.example.android4homework2.databinding.ItemAnimeBinding
 
-class AnimeAdapter : PagingDataAdapter<DataItem, AnimeAdapter.ViewHolder>(diffUtil) {
+class AnimeAdapter(private val onItemClick: (id: String) -> Unit) :
+    PagingDataAdapter<DataItem, AnimeAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val binding: ItemAnimeBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                getItem(absoluteAdapterPosition)?.let {
+                    onItemClick(it.id)
+                }
+            }
+        }
 
         fun onBind(animeData: DataItem) = with(binding) {
             Glide.with(ivImage.context)

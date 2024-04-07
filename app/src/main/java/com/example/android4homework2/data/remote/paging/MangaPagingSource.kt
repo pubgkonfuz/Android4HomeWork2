@@ -1,5 +1,7 @@
 package com.example.android4homework2.data.remote.paging
 
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.android4homework2.data.remote.apiservice.KitsuApiService
@@ -22,8 +24,9 @@ class MangaPagingSource(private val kitsuApiService: KitsuApiService) :
         val offSet = params.key ?: 1
         return try {
             val response = kitsuApiService.getManga(limit = pageSize, offset = offSet)
-            val nextPage = if (response.data.isNotEmpty()) offSet + 1 else null
-
+            val nextPage = if (response.links.next != null) {
+                response.links.next.toUri().getQueryParameter("page[offset]")!!.toInt()
+            } else null
             LoadResult.Page(
                 data = response.data,
                 prevKey = null,

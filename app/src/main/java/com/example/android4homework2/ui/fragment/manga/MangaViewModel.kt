@@ -1,13 +1,13 @@
 package com.example.android4homework2.ui.fragment.manga
 
 import androidx.lifecycle.ViewModel
-import com.example.android4homework2.data.repository.AnimeRepository
+import com.example.android4homework2.data.repository.KitsuRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MangaViewModel @Inject constructor(
-    private val repositories: AnimeRepository
+    private val repositories: KitsuRepository
 ) : ViewModel() {
 
     fun getManga() = repositories.fetchManga()

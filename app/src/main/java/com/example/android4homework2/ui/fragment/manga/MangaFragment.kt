@@ -8,11 +8,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.android4homework2.R
 import com.example.android4homework2.databinding.FragmentMangaBinding
 import com.example.android4homework2.ui.adapter.AnimeAdapter
+import com.example.android4homework2.ui.adapter.MangaAdapter
+import com.example.android4homework2.ui.fragment.ViewPagerFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,33 +24,31 @@ import kotlinx.coroutines.launch
 class MangaFragment : Fragment(R.layout.fragment_manga) {
 
     private val binding by viewBinding(FragmentMangaBinding::bind)
-    private val mangaAdapter = AnimeAdapter()
+    private val mangaAdapter = MangaAdapter(::onItemClick)
     private val viewModels by viewModels<MangaViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initialize()
         subscribe()
+        mangaLaunch()
+
+    }
+
+    private fun mangaLaunch() = with(binding) {
         viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            if (binding.progressBar.isVisible) {
-                binding.progressBar.isVisible = false
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
                 mangaAdapter.loadStateFlow.collect {
-                    binding.appendProgress.isVisible = it.source.prepend is LoadState.Loading
-                    binding.prependProgress.isVisible = it.source.append is LoadState.Loading
+                    progressBar.isVisible = it.source.refresh is LoadState.Loading
+                    appendProgress.isVisible = it.source.append is LoadState.Loading
                 }
             }
         }
     }
 
     private fun initialize() {
-        binding.rv.apply {
-            adapter = mangaAdapter
-        }
+        binding.rvManga.adapter = mangaAdapter
+
     }
 
     private fun subscribe() {
@@ -56,5 +57,13 @@ class MangaFragment : Fragment(R.layout.fragment_manga) {
                 mangaAdapter.submitData(it)
             }
         }
+    }
+
+    private fun onItemClick(id: String) {
+        findNavController().navigate(
+            ViewPagerFragmentDirections.actionViewPagerFragment2ToDetailFragment(
+                id
+            )
+        )
     }
 }

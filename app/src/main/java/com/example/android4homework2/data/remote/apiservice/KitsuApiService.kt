@@ -7,7 +7,6 @@ import retrofit2.http.Query
 private const val ANIME_END_POINT = "anime"
 private const val MANGA_END_POINT = "manga"
 
-
 interface KitsuApiService {
 
     @GET(ANIME_END_POINT)
